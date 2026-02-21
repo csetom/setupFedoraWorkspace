@@ -54,36 +54,22 @@
       install_weak_deps: no
       exclude:
         - PackageKit-gstreamer-plugin
-  - name: Install mesa-va-drivers-freeworld 
-    ansible.builtin.dnf:
-      name: 
-        - mesa-va-drivers-freeworld
-        - mesa-va-drivers-freeworld.i686 
-      state: present
-    become: true
-  - name: Install mesa-va-drivers-freeworld 
-    ansible.builtin.dnf:
-      name: 
-        - mesa-va-drivers-freeworld
-        - mesa-va-drivers-freeworld.i686 
-      state: present
-    become: true
-  - name: Install mesa-va-drivers-freeworld 
-    ansible.builtin.dnf:
-      name: 
-        - mesa-va-drivers-freeworld
-        - mesa-va-drivers-freeworld.i686 
-        - mesa-vulkan-drivers-freeworld
-        - mesa-vulkan-drivers-freeworld.i686
-      state: present
-      allowerasing: true
-    become: true
   - name: Remove mesa-va-drivers (non freeworld)
     ansible.builtin.dnf:
       name: 
-        - mesa-va-drivers
+        - mesa-va-drivers.x86_64
         - mesa-va-drivers.i686
-        - mesa-vulkan-drivers
+        - mesa-vulkan-drivers.x86_64
         - mesa-vulkan-drivers.i686
       state: absent
+    become: true
+  - name: Install mesa-va-drivers-freeworld 
+    ansible.builtin.dnf:
+      name: 
+        - mesa-va-drivers-freeworld.x86_64
+        - mesa-va-drivers-freeworld.i686 
+        - mesa-vulkan-drivers-freeworld.x86_64
+        - mesa-vulkan-drivers-freeworld.i686
+      state: present
+      allowerasing: true
     become: true
