@@ -1,0 +1,88 @@
+---
+
+- name: Setup Desktop Workspace
+  connection: local
+  hosts: localhost
+  tasks:
+  - name: Get Fedora version via RPM
+    shell: rpm -E %fedora
+    register: rpm_fedora_version
+    changed_when: false
+  - name: Access the saved variable
+    debug:
+      msg: "The captured version is {{ rpm_fedora_version.stdout }}"
+  - name: Getting Distribution Keys 
+    dnf:
+      name: 
+        - distribution-gpg-keys
+      state: present
+    become: true
+  - name: Importing RPM Fusion (free) key
+    become: yes
+    rpm_key:
+      state: present
+      key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-free-fedora-{{ rpm_fedora_version.stdout }}"
+  - name: Importing RPM Fusion (nonfree) key
+    become: yes
+    rpm_key:
+      state: present
+      key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-nonfree-fedora-{{ rpm_fedora_version.stdout }}"
+    become: yes
+  - name: Enable RPM Fusion Free repository 
+    dnf:
+      name: 
+        - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ rpm_fedora_version.stdout }}.noarch.rpm"
+        - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ rpm_fedora_version.stdout }}.noarch.rpm"
+      state: present
+    become: yes
+  - name: Getting Essential Apps 
+    dnf:
+      name: 
+        - mc
+        - vim-enhanced
+        - neovim
+        - jq
+        - git
+      state: present
+    become: true
+  - name: Getting Firefox 
+    dnf:
+      name: 
+        - firefox
+      state: present
+    become: true
+    become: true
+  - name: Getting Essential KDE Apps 
+    dnf:
+      name: 
+        - vlc
+        - okular
+        - qimgv
+        - doublecmd-qt
+        - discord
+        - telegram-desktop
+      state: present
+    become: true
+  - name: Getting steam
+    dnf:
+      name: 
+        - steam 
+      state: present
+    become: true
+  - name: Gameing Shit
+    dnf: 
+      name: 
+        - mangohud
+        - gamemode
+      state: present
+    become: true
+  - name: Enable LizardByte stable COPR repository
+    community.general.copr:
+      name: lizardbyte/beta
+  - name: Install Sunshine
+    dnf:
+      name: 
+        - Sunshine
+      state: present
+      update_cache: yes
+    become: true

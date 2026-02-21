@@ -1,0 +1,32 @@
+---
+
+- name: Setup KDE Klassy
+  connection: local
+  hosts: localhost
+  tasks:
+  - name: Paulmcauley Fedora 43 repo fajl importalasa
+    get_url:
+      url: https://download.opensuse.org/repositories/home:paulmcauley/Fedora_43/home:paulmcauley.repo
+      dest: /etc/yum.repos.d/paulmcauley_fedora43.repo
+      owner: root
+      group: root
+      mode: '0644'
+    register: repo_download
+  - name: Update Packages
+    dnf:
+      update_only: true
+    become: true
+  - name: Install Klassy
+    dnf:
+      name: klassy
+      state: present
+      update_cache: true
+    become: true
+  - name: Apply Klassy Light Theme
+    command:
+      argv: 
+        - "lookandfeeltool"
+        - "-a"
+        - "org.kde.klassykitelightleftpanel.desktop"
+        - "--resetLayout"
+    
