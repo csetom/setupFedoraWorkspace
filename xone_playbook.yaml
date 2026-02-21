@@ -1,0 +1,20 @@
+---
+
+- name: Setup KDE Klassy
+  connection: local
+  hosts: localhost
+  tasks:
+    - name: install dependecy
+      dnf: 
+        name:
+          - dkms
+          - curl
+          - bsdtar
+      become: true
+    - name: Checkout xone
+      git:
+        repo: 'https://github.com/dlundqvist/xone.git' 
+        dest: /tmp/xone
+    - name: Install Xone
+      command:
+        cmd: "cd /tmp/xone && make install"
